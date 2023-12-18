@@ -5,7 +5,8 @@ const MessageActions = findByProps("sendMessage", "receiveMessage");
 const Locale = findByProps("Messages");
 
 
-// This plugin is HEAVILY inspired by other plugins and the urge to get plugdetta role
+// This plugin is HEAVILY inspired by other plugins and the urge to get plugdetta
+let patches = [];
 const rep_list = [["u", "you"],
     ["wat", "what"],
     ["oh", "Fuck you"],
@@ -52,7 +53,11 @@ function be_serious(message: string): string {
             continue;
         }
 
-        resp += replaceText(words[i]);
+        if (!replaceText(words[i])) {
+            resp += words[i]
+                .replace(/n(?=[aeo])/g, "ny")
+                .replace(/l|r/g, "w");
+        } else resp += replaceText(words[i]);
 
     }
 
@@ -60,8 +65,19 @@ function be_serious(message: string): string {
     return resp;
 }
 
+function array_serious(arr) {
+    const new_array = [...arr];
 
-let patches = [];
+    new_array.forEach((item, index) => {
+        if (Array.isArray(item)) {
+            new_array[index] = array_serious(item);
+        } else if (typeof item === "string") {
+            new_array[index] = be_serious(item);
+        }
+    });
+
+    return new_array;
+}
 
 export default {
     onLoad: () => {
