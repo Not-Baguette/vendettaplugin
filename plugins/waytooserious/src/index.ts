@@ -6,8 +6,6 @@ const Locale = findByProps("Messages");
 
 
 // This plugin is HEAVILY inspired by other plugins and the urge to get plugdetta role
-
-let patches = [];
 const rep_list = [["u", "you"],
     ["wat", "what"],
     ["oh", "Fuck you"],
@@ -54,17 +52,16 @@ function be_serious(message: string): string {
             continue;
         }
 
-        if (!replaceText(words[i])) {
-            resp += words[i]
-                .replace(/n(?=[aeo])/g, "ny")
-                .replace(/l|r/g, "w");
-        } else resp += replaceText(words[i]);
+        resp += replaceText(words[i]);
 
     }
 
     resp += pick_shit(serious_list);
     return resp;
 }
+
+
+let patches = [];
 
 export default {
     onLoad: () => {
